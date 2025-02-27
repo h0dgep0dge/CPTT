@@ -16,7 +16,7 @@ while True:
         p.expr()
         print(p.pop())
     except UnexpectedToken as e:
-        print("Unexpected character")
+        print("Unexpected character",e.args[0].value)
         print(line)
         print(" " * (e.args[0].col-1) + "^")
     except UnexpectedEnd as e:

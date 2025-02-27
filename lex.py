@@ -62,7 +62,12 @@ class Lexer:
         start = self.ptr
         while self.is_not_empty() and self.peek() in string.digits:
             self.chop()
+        if self.is_not_empty() and self.peek() == '.':
+            self.chop()
+            while self.is_not_empty() and self.peek() in string.digits:
+                self.chop()
         return Token(TokenType.NUMBER,self.source[start:self.ptr],self.line,self.col)
+        
 
     def ident(self):
         start = self.ptr

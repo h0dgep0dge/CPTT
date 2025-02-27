@@ -66,14 +66,16 @@ class Lexer:
             self.chop()
             while self.is_not_empty() and self.peek() in string.digits:
                 self.chop()
-        return Token(TokenType.NUMBER,self.source[start:self.ptr],self.line,self.col)
+        len = self.ptr - start
+        return Token(TokenType.NUMBER,self.source[start:self.ptr],self.line,self.col-len)
         
 
     def ident(self):
         start = self.ptr
         while self.is_not_empty() and self.peek() in string.ascii_letters:
             self.chop()
-        return Token(TokenType.IDENT,self.source[start:self.ptr],self.line,self.col)
+        len = self.ptr - start
+        return Token(TokenType.IDENT,self.source[start:self.ptr],self.line,self.col-len)
 
     def next_token(self):
         while self.is_not_empty() and self.peek().isspace():

@@ -9,6 +9,11 @@ class UnexpectedEnd(Exception):
     pass
 
 class Parser:
+    SYMBOLS = {
+        "pi":3.141592653589793,
+        "e":2.718281828459045
+    }
+
     def __init__(self,tokens):
         self.tokens = tokens
         self.ptr = 0
@@ -86,11 +91,13 @@ class Parser:
             self.term()
             self.add()
             self.rexpr()
+            return
         if self.check(TokenType.MINUS):
             self.expect(TokenType.MINUS)
             self.term()
             self.sub()
             self.rexpr()
+            return
         "episilon"
     
     def term(self):
@@ -124,7 +131,7 @@ class Parser:
         '''
         factor -> number {push number}
                 | - {push 0} factor {sub}
-                | ident {push ident}
+                | ident {push SYMBOLS[ident]}
                 | ( expr )
         '''
         if self.check(TokenType.MINUS):
@@ -137,7 +144,10 @@ class Parser:
             self.push(float(self.expect(TokenType.NUMBER).value))
             return
         if self.check(TokenType.IDENT):
-            self.push(self.expect(TokenType.IDENT).value)
+            id = self.expect(TokenType.IDENT)
+            if id.value not in self.SYMBOLS:
+                raise UnexpectedToken(id)
+            self.push(self.SYMBOLS[id.value])
             return
         if self.check(TokenType.LPAREN):
             self.expect(TokenType.LPAREN)
